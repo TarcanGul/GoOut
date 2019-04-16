@@ -9,3 +9,8 @@ TEMPLATE_PATH = os.path.join(APP_PATH,"../front-end")
 @app.route("/")
 def indexWebsite():
 	return render_template("index.html")
+
+
+@app.route("/createEvent")
+def serveCreateEventPage():
+  return render_template("createEvent.html")
