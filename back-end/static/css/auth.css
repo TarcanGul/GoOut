@@ -30,6 +30,18 @@ body {
     text-align: center;
 }
 
+/*This block will work with every input html tag that is type submit.*/
+input[type=submit] {
+    width: 50%;
+    background-color: blue;
+    color: white;
+    padding: 14px 18px;
+    margin: 8px 14px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
 #middleText {
     text-align: center
 }
