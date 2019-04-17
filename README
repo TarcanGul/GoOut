@@ -10,3 +10,17 @@ Technologies:
 HTML5, CSS, Javascript
 Python Flask
 Firebase
+
+IMPORTANT (FILE HIERARCHY)
+
+/app
+    index.py
+    /services
+        - python helper files 
+    /front-end
+        - html files
+    /static
+        /css
+            - css files
+        /images
+            - image files
