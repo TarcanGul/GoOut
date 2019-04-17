@@ -1,0 +1,40 @@
+.split {
+    height: 100%;
+    width: 50%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+
+.left {
+    left: 0;
+}  
+
+.right{
+    right: 0;
+}
+  
+
+body {
+    background-color: powderblue;
+}
+
+
+#signin {
+    text-align: center;
+}
+
+#signup {
+    text-align: center;
+}
+
+#middleText {
+    text-align: center
+}
+
+p {
+    text-align: center;
+    color: rebeccapurple;
+}

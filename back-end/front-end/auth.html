@@ -1,15 +1,29 @@
 <!DOCTYPE HTML>
 <html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css//auth.css') }}">
+	</head>
 <body>
-
-	<h1 style="text-align: center;"><span style="color: #0000ff;">Sign In</span></h1>
+	<div class="split left">
+	<h1 id="signin">Sign In!</h1>
+	
 	<form>
-	<p><span style="color: #333399;"><span style="color: #008000;">Username          :</span> <input autocomplete="off" name="username" type="text" /></span></p>
-	<p><span style="color: #333399;"><span style="color: #008000;">Password           :</span> <input name="password" type="password" /></span></p>
-	<p><span style="color: #333399;"><span style="color: #008000;"><input name="authType" type="radio" value="Sign Up" /> Sign Up<br /></span></span></p>
-	<p><span style="color: #333399;"><span style="color: #008000;"><input checked="checked" name="authType" type="radio" value="Sign In" /> Sign In<br /></span></span></p>
-	<p><br /><br /><input type="submit" value="Go Out!" /></p>
+	<p>Username:<input autocomplete="off" name="username" type="text" /></p>
+	<p>Password:<input name="password" type="password" /></p>
+	<p><input type="submit" value="Go Out!" /></p>
 	</form>
+	</div>
+	<h3 id="middleText"> or...</h3>
+	<div class="split right">
+		<h1 id="signup">Sign Up!</h1>
+		
+		<form>
+		<p>Username:<input autocomplete="off" name="username" type="text" /></p>
+		<p>Password:<input name="password" type="password" /></p>
+		<p><input type="submit" value="Go Out!" /></p>
+		</form>
+	</div>
+
 
 </body>
 </html>
