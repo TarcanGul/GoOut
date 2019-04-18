@@ -1,17 +1,20 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<!--<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css//auth.css') }}"> -->
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css//authManager.css') }}"> 
 	</head>
 <body>
+    
 	<div class="split left">
+    <a id="managerLink" href="auth"> Are you a regular user? Click here! </a>
 	<h1 id="signin">Manager Sign In</h1>
 	
 	<form id="signInForm" action="{{url_for('handleSignIn')}}" method="POST">
 	<p>Username:<input autocomplete="off" name="username" type="text" /></p>
 	<p>Password:<input name="password" type="password" /></p>
 	<p><input id="singInInput" type="submit" value="Go Out!" /></p>
-	</form>
+    </form>
+    
 	</div>
 	<h3 id="middleText"> or...</h3>
 	<div class="split right">

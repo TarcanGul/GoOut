@@ -31,6 +31,7 @@ def serveAuthPage():
   if request.method == 'GET':
     return render_template("auth.html")
 
+#TODO: Integrate manager sign up too maybe using a basic query string to understand whether if is the user signing up or manager. 
 @app.route("/handleSignUp", methods=['POST'])
 def handleSignUp():
   username = request.form['username']
@@ -49,7 +50,7 @@ def handleSignUp():
   return redirect("/")
   #return render_template("userAlreadyExist.html")
 
-
+#TODO: Integrate manager sign in too maybe using a basic query string to understand whether if is the user signing in or manager. 
 @app.route("/handleSignIn", methods=['POST'])
 def handleSignIn():
   username = request.form['username']
@@ -72,7 +73,9 @@ def handleSignIn():
   	  #auth fail
 	  return "Password incorrect"
 
-
+@app.route("/authManager")
+def serveManagerAuth():
+  return render_template("authManager.html")
 
 @app.route("/test")
 def getUsers():
