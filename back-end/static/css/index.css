@@ -5,12 +5,12 @@ body {
 
 .topnav {
   overflow: hidden;
-  background-color: orange;
+  background-color: black;
 }
 
 .topnav a {
   float: left;
-  color: purple;
+  color: white;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
@@ -18,11 +18,44 @@ body {
 }
 
 .topnav a:hover {
-  background-color: green;
+  background-color: grey;
   color: black;
 }
 
 .topnav a.active {
-  background-color: blue;
+  background-color: grey;
   color: white;
+}
+
+.container_img {
+  position: relative;
+  text-align: center;
+  color: white;
+}
+
+.centered_low {
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 500%;
+  color: white;
+}
+
+.intro {
+  text-align: center;
+  padding-top: 64px;
+  padding-bottom: 64px;
+
+}
+
+h2 {
+  font-family: "Segoi UI",Arial, sans-serif;
+  font-weight: 400;
+  margin: 10px 0;
+  font-size: 50px;
+}
+
+.opaque {
+  opacity: 0.70;
 }
