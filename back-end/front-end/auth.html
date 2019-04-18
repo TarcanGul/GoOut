@@ -7,7 +7,7 @@
 	<div class="split left">
 	<h1 id="signin">Sign In!</h1>
 	
-	<form>
+	<form id="signInForm" action="" method="POST">
 	<p>Username:<input autocomplete="off" name="username" type="text" /></p>
 	<p>Password:<input name="password" type="password" /></p>
 	<p><input id="singInInput" type="submit" value="Go Out!" /></p>
@@ -17,10 +17,10 @@
 	<div class="split right">
 		<h1 id="signup">Sign Up!</h1>
 		
-		<form>
+		<form id="signUpForm" action="{{url_for('handleSignUp')}}" method="POST">
 		<p>Username:<input autocomplete="off" name="username" type="text" /></p>
 		<p>Password:<input name="password" type="password" /></p>
-		<p><input type="submit" value="Go Out!" /></p>
+		<p><input id="singUpInput" type="submit" value="Go Out!" /></p>
 		</form>
 	</div>
 
