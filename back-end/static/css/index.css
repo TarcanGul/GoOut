@@ -59,3 +59,7 @@ h2 {
 .opaque {
   opacity: 0.70;
 }
+
+.foot_container {
+  text-align: center;
+}
