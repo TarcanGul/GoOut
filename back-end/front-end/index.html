@@ -3,18 +3,23 @@
 		<link rel="stylesheet" type="text/css" href="../static/css/index.css">
 	</head>
 	<body>
+		
 		<div class="topnav">
+		{% block topnav %}
 		  <a class="active" href="home">Home</a>
 		  <a href="auth">Users</a>
 		  <a href="Events">Events</a>
 		  <a href="about">About</a>
+		{% endblock %}
 		</div>
+		
 
+		
 		<div class="container_img">
-			<img src="../static/Images/wide_concert.jpg"  style="width: 100%">
-			<div class="centered_low">Time to Go Out!</div>
+			{% block photo %}<img src="../static/Images/wide_concert.jpg"  style="width: 100%">{% endblock %}
+			<div class="centered_low">{% block main_text %}Time to Go Out!{% endblock %}</div>
 		</div>
-
+		
 		<div class="intro">
 			<h2>Go Out!</h2>
 

@@ -31,7 +31,6 @@ def serveAuthPage():
   if request.method == 'GET':
     return render_template("auth.html")
 
-#TODO: Integrate manager sign up too maybe using a basic query string to understand whether if is the user signing up or manager. 
 @app.route("/handleSignUp", methods=['POST'])
 def handleSignUp():
   
@@ -73,13 +72,12 @@ def handleSignUp():
 
   
 
-#TODO: Integrate manager sign in too maybe using a basic query string to understand whether if is the user signing in or manager. 
 @app.route("/handleSignIn", methods=['POST'])
 def handleSignIn():
 
   auth = request.args.get("auth")
   username = request.form['username']
-  #check username
+   #If auth is for user
   if auth == 'u':
     result = firebase.get('/users', username)
     if result == None:
@@ -98,6 +96,8 @@ def handleSignIn():
     else:
         #auth fail
       return "Password incorrect"
+
+   #If auth is for manager
   elif auth == 'm':
     result = firebase.get('/managers', username)
     if result == None:
@@ -112,7 +112,7 @@ def handleSignIn():
     print(str(result), file=sys.stderr)
     if str(result) == password.hexdigest():
       #auth success
-      return redirect("/")
+      return redirect(url_for('serveManagerHome', username=username))
     else:
         #auth fail
       return "Password incorrect"
@@ -123,6 +123,16 @@ def handleSignIn():
 @app.route("/authManager")
 def serveManagerAuth():
   return render_template("authManager.html")
+
+#TODO: Keep track of authentication so the user cannot access the manager profile by directly typing the url. 
+@app.route("/managerHome/<username>")
+def serveManagerHome(username):
+  result = firebase.get("/managers", username)
+  if result == None:
+    #Manager does not exist.
+    #TODO: Maybe have 404.html to show here.
+    return "Manager does not exist."
+  return render_template("managerMainPage.html", username=username)
 
 @app.route("/test")
 def getUsers():

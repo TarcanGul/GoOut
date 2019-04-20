@@ -1,0 +1,11 @@
+{% extends "index.html" %}
+{% block topnav %}
+<a class="active" href="/managerHome">Home</a>
+<a href="createEvent">Create Event</a>
+{% endblock %}
+{% block photo %}
+{{ super() }}
+{% endblock %}
+{% block main_text %}
+Welcome {{username}}! Here are your events so far!
+{% endblock %}
