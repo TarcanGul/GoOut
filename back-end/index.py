@@ -16,6 +16,7 @@ projectID = "https://goout-5cd6e.firebaseio.com/"
 firebase = firebase.FirebaseApplication(projectID, None)
 
 def generateEventID(title):
+  #TODO: The generateEventID() method should return a number computed using event title, date, time and location.
   return ord(title[0]) * 37
 
 @app.route("/")
@@ -46,6 +47,7 @@ def addEvent(username):
   firebase.put(event_attributes, "date", date)
   firebase.put(event_attributes, "time", time)
   firebase.put(event_attributes, "description", description)
+  firebase.put(event_attributes, "rsvp", 0)
   #Confirmation html
   return redirect(url_for('serveManagerHome', username=username))
 
@@ -85,7 +87,7 @@ def handleSignUp():
       raw_password = request.form['password']
       raw_password.encode("utf-8")
       password = hashlib.md5(raw_password.encode())
-      #TODO: Push username and password to the database.
+      #Push username and password to the database.
       push = firebase.put('/managers', username, password.hexdigest())
       return redirect("/")
     #Error: Manager name already exists.
@@ -156,7 +158,8 @@ def serveManagerHome(username):
     #Manager does not exist.
     #TODO: Maybe have 404.html to show here.
     return "Manager does not exist."
-  return render_template("managerMainPage.html", username=username)
+  allEvents = firebase.get("/events", None)
+  return render_template("managerMainPage.html", username=username, allEvents=allEvents)
 
 @app.route("/test")
 def getUsers():

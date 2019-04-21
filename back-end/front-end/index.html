@@ -21,6 +21,7 @@
 		</div>
 		
 		<div class="intro">
+		{% block intro %}
 			<h2>Go Out!</h2>
 
 			<p class="opaque">
@@ -28,11 +29,16 @@
 			</p>
 
 			<p>description</p>
+		{% endblock %}
 		</div>
 
+		{% block footer %}
 		<footer class="foot_container">
 			<i>Foot stuff</i>
+		{% endblock %}
+		{% block buttom_text %}
 		<p>Powered by Coffee</p>
+		{% endblock %}
 
 	</body>
 </html>
