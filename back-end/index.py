@@ -15,16 +15,39 @@ app.static_folder="static"
 projectID = "https://goout-5cd6e.firebaseio.com/"
 firebase = firebase.FirebaseApplication(projectID, None)
 
-
+def generateEventID(title):
+  return ord(title[0]) * 37
 
 @app.route("/")
 def indexWebsite():
 	return render_template("index.html")
 
 
-@app.route("/createEvent")
-def serveCreateEventPage():
-  return render_template("createEvent.html")
+@app.route("/managerHome/createEvent/<username>")
+def serveCreateEventPage(username):
+  return render_template("createEvent.html", username=username)
+
+@app.route("/managerAction/addEvent/<username>", methods=['POST'])
+def addEvent(username):
+  #So the idea is that we have to create a event node using title as key (or maybe some number generated like title_id)
+  title = request.form["title"]
+
+  result = firebase.put("/events", title, generateEventID(title))
+  #Then we will add rest of the attributes as their child.
+  event_attributes = "/events/" + title
+  
+  location = request.form["location"]
+  date = request.form["date"]
+  time = request.form["time"]
+  description = request.form["description"]
+
+  firebase.put(event_attributes, "manager", username)
+  firebase.put(event_attributes, "location", location)
+  firebase.put(event_attributes, "date", date)
+  firebase.put(event_attributes, "time", time)
+  firebase.put(event_attributes, "description", description)
+  #Confirmation html
+  return redirect(url_for('serveManagerHome', username=username))
 
 @app.route("/auth")
 def serveAuthPage():
@@ -127,6 +150,7 @@ def serveManagerAuth():
 #TODO: Keep track of authentication so the user cannot access the manager profile by directly typing the url. 
 @app.route("/managerHome/<username>")
 def serveManagerHome(username):
+  #TODO: Auth first
   result = firebase.get("/managers", username)
   if result == None:
     #Manager does not exist.
