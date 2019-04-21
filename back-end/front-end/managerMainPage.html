@@ -1,3 +1,5 @@
+{#If you want to learn more about Jinja2: http://jinja.pocoo.org/docs/2.10/templates/ #}
+
 {% extends "index.html" %}
 {% block topnav %}
 <a class="active" href="/managerHome">Home</a>
@@ -10,9 +12,19 @@
 Welcome {{username}}! Here are your events so far!
 {% endblock %}
 {% block intro %}
-{% for event in allEvents.items() %}
-{% if event[1]['manager'] == username %}
+<table style="table-layout: fixed; width: 100%;columns: 3;border: 1px solid black">
+<colgroup>
+    <col span="3" style="background-color:blanchedalmond">
+</colgroup>
+<tr>
+    <th></th>
+</tr>
 {# event[0] will be the parent key and event[1] is the child. #}
+
+{% for event in allEvents.items() %}
+<tr>
+{% if event[1]['manager'] == username %}
+<td>
 <h3>{{ event[0] }}</h3>
 <p>Date: {{ event[1]['date'] }}</p>
 <p>Time: {{ event[1]['time'] }}</p>
@@ -20,6 +32,10 @@ Welcome {{username}}! Here are your events so far!
 <p>Description: {{ event[1]['description'] }}</p>
 <p>Number of RSVP's: {{ event[1]['rsvp'] }}</p>
 <br>
+</td>
+</tr>
 {% endif %}
 {% endfor %}
+
+</table>
 {% endblock %}
