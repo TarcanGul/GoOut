@@ -12,30 +12,35 @@
 Welcome {{username}}! Here are your events so far!
 {% endblock %}
 {% block intro %}
-<table style="table-layout: fixed; width: 100%;columns: 3;border: 1px solid black">
-<colgroup>
-    <col span="3" style="background-color:blanchedalmond">
-</colgroup>
-<tr>
-    <th></th>
-</tr>
+<style>
+    .gridContainer {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        background-color: rgb(197, 77, 97);
+        padding: 10px;
+    }
+    .gridElement {
+        background-color: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(0, 0, 0, 0.8);
+        padding: 20px;
+        font-size: 15px;
+        text-align: center;
+    }
+</style>
 {# event[0] will be the parent key and event[1] is the child. #}
-
-{% for event in allEvents.items() %}
-<tr>
-{% if event[1]['manager'] == username %}
-<td>
-<h3>{{ event[0] }}</h3>
-<p>Date: {{ event[1]['date'] }}</p>
-<p>Time: {{ event[1]['time'] }}</p>
-<p>Location: {{ event[1]['location'] }}</p>
-<p>Description: {{ event[1]['description'] }}</p>
-<p>Number of RSVP's: {{ event[1]['rsvp'] }}</p>
-<br>
-</td>
-</tr>
-{% endif %}
-{% endfor %}
-
-</table>
+<div class="gridContainer" >
+    {% for event in allEvents.items() %}
+        {% if event[1]['manager'] == username %}
+        <div class="gridElement">
+        <h3>{{ event[0] }}</h3>
+        <p>Date: {{ event[1]['date'] }}</p>
+        <p>Time: {{ event[1]['time'] }}</p>
+        <p>Location: {{ event[1]['location'] }}</p>
+        <p>Description: {{ event[1]['description'] }}</p>
+        <p>Number of RSVP's: {{ event[1]['rsvp'] }}</p>
+        <br>
+        </div>
+        {% endif %}
+    {% endfor %}
+</div>
 {% endblock %}
