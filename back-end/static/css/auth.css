@@ -19,7 +19,7 @@
 
 
 body {
-    background-color: powderblue;
+    background: white;
 }
 
 
@@ -34,7 +34,7 @@ body {
 /*This block will work with every input html tag that is type submit.*/
 input[type=submit] {
     width: 50%;
-    background-color: blue;
+    background-color: green;
     color: white;
     padding: 14px 18px;
     margin: 8px 14px;
