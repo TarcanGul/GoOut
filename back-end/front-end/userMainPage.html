@@ -1,7 +1,9 @@
 {% extends "index.html" %}
 {% block topnav %}
 <a class="active" href="/userHome/{{username}}">Home</a>
-<a text-align="right" href="/">Log Out</a>
+<div class="right">
+    <a href="/">Log Out</a>
+</div>
 {% endblock %}
 {% block photo %}
 {{ super() }}
@@ -27,6 +29,12 @@ Welcome {{username}}! Here are the events nearby!
         text-align: center;
         border-radius: 25px;
         box-shadow: 5px 10px #888888;
+        opacity: 0.8;
+    }
+
+    .gridElement:hover {
+        transform: scale(1.1);
+        opacity: 1.0;
     }
 </style>
 {# event[0] will be the parent key and event[1] is the child. #}
