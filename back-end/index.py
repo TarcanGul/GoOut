@@ -23,6 +23,24 @@ def generateEventID(title):
 def indexWebsite():
 	return render_template("index.html")
 
+@app.route("/userHome/<username>")
+def serveUserHomePage(username):
+  #TODO: Auth first
+  result = firebase.get("/users", username)
+  if result == None:
+    #User does not exist.
+    #TODO: Maybe have 404.html to show here.
+    return "User does not exist."
+  allEvents = firebase.get("/events", None)
+  return render_template("userMainPage.html", username=username, allEvents=allEvents)
+
+@app.route("/userAction/RSVP/<username>/<event>", methods=['POST'])
+def rsvpToEvent(username, event):
+  result = firebase.get("/events", event)
+  RSVP = int(result['rsvp'])
+  RSVP = RSVP + 1
+  firebase.put("/events/" + event, "rsvp", RSVP)
+  return redirect(url_for('serveUserHomePage', username=username))
 
 @app.route("/managerHome/createEvent/<username>")
 def serveCreateEventPage(username):
@@ -117,7 +135,7 @@ def handleSignIn():
     print(str(result), file=sys.stderr)
     if str(result) == password.hexdigest():
       #auth success
-      return redirect("/")
+      return redirect(url_for('serveUserHomePage', username=username))
     else:
         #auth fail
       return "Password incorrect"

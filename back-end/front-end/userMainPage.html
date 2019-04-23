@@ -1,0 +1,46 @@
+{% extends "index.html" %}
+{% block topnav %}
+<a class="active" href="/managerHome">Home</a>
+<a text-align="right" href="/">Log Out</a>
+{% endblock %}
+{% block photo %}
+{{ super() }}
+{% endblock %}
+{% block main_text %}
+Welcome {{username}}! Here are the events nearby!
+{% endblock %}
+{% block intro %}
+<style>
+    .gridContainer {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        background-color: rgb(95, 41, 50);
+        padding: 10px;
+    }
+    .gridElement {
+        background-color: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(0, 0, 0, 0.8);
+        padding: 20px;
+        font-size: 15px;
+        text-align: center;
+    }
+</style>
+{# event[0] will be the parent key and event[1] is the child. #}
+<div class="gridContainer" >
+    {% for event in allEvents.items() %}
+        <div class="gridElement">
+        <h3>{{ event[0] }}</h3>
+        <p>Date: {{ event[1]['date'] }}</p>
+        <p>Time: {{ event[1]['time'] }}</p>
+        <p>Location: {{ event[1]['location'] }}</p>
+        <p>Description: {{ event[1]['description'] }}</p>
+        <p>Manager: {{ event[1]['manager'] }} </p>
+        <p>Number of RSVP's: {{ event[1]['rsvp'] }}</p>
+        <br>
+        <form action="{{url_for('rsvpToEvent', username = username, event = event[0])}}" method="POST">
+        <button id="RSVP" onclick="alert('Thank you for your RSVP to {{event[0]}}'); this.disabled = true;"> RSVP </button>
+        </form>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
