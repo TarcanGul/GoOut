@@ -17,9 +17,9 @@ projectID = "https://goout-5cd6e.firebaseio.com/"
 firebase = firebase.FirebaseApplication(projectID, None)
 
 
-def generateEventID(title, location, date, time):
+def generateEventID(title):
     # TODO: The generateEventID() method should return a number computed using event title, date, time and location.
-    raw_eventID = title + location + date + time
+    raw_eventID = title
     raw_eventID.encode("utf-8")
 
     eventID = hashlib.md5(raw_eventID.encode())
@@ -97,7 +97,7 @@ def addEvent(username):
     time = request.form["time"]
     description = request.form["description"]
 
-    result = firebase.put("/events", title, generateEventID(title, location, date, time))
+    result = firebase.put("/events", title, generateEventID(title))
     # Then we will add rest of the attributes as their child.
     event_attributes = "/events/" + title
 
