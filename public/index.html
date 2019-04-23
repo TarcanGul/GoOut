@@ -1,0 +1,45 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="../static/css/index.css">
+	</head>
+	<body>
+		
+		<div class="topnav">
+		{% block topnav %}
+		  <a class="active" href="home">Home</a>
+		  <a href="auth">Users</a>
+		  <a href="Events">Events</a>
+		  <a href="about">About</a>
+		{% endblock %}
+		</div>
+		
+
+		
+		<div class="container_img">
+			{% block photo %}<img src="../static/Images/wide_concert.jpg"  style="width: 100%">{% endblock %}
+			<div class="centered_low">{% block main_text %}Time to Go Out!{% endblock %}</div>
+		</div>
+		
+		<div class="intro">
+		{% block intro %}
+			<h2>Go Out!</h2>
+
+			<p class="opaque">
+				<i>More text</i>
+			</p>
+
+			<p>description</p>
+		{% endblock %}
+		</div>
+
+		{% block footer %}
+		<footer class="foot_container">
+			<i>Foot stuff</i>
+		{% endblock %}
+		{% block buttom_text %}
+		<p>Powered by Coffee</p>
+		{% endblock %}
+
+	</body>
+</html>
+
