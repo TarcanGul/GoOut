@@ -1,17 +1,54 @@
 <!DOCTYPE html>
 <html>
+<head>
+	<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+* {box-sizing: border-box;}
 
+input[type=text], select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+
+input[type=submit] {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
+}
+
+.container {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+</style>
+</head>
 <body>
 <h1 style="text-align: center;"><span style="color: #000080;">GO OUT</span></h1>
 <h2>&nbsp;<span style="color: #000080;">Create event</span></h2>
-	<form id="eventForm" action="{{url_for('addEvent', username=username)}}" method="POST">
-	<p><span style="color: #008000;">Title&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;:</span>&nbsp;<input name="title" type="text" autocomplete="off"/></p>
-	<p><span style="color: #008000;">Location&nbsp; &nbsp; &nbsp; :</span>&nbsp;<input name="location" type="text" autocomplete="off"/></p>
-	<p><span style="color: #008000;">Date&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; :</span>&nbsp;<input name="date" type="date" /></p>
-	<p><span style="color: #008000;">Time&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; :</span>&nbsp;<input name="time" type="time" /></p>
-	<p><span style="color: #008000;">Description&nbsp; :</span></p>
-	<p><textarea cols="50" name="description" rows="5" autocomplete="off"></textarea></p>
-	<p><br /><br /> <input type="submit" value="Create Event" /></p>
-	</form>
+	<div class="container">
+		<form id="eventForm" action="{{url_for('addEvent', username=username)}}" method="POST">
+		<p><span style="color: #008000;">Title&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;:</span>&nbsp;<input name="title" type="text" autocomplete="off" placeholder="Event Title..."/></p>
+		<p><span style="color: #008000;">Location&nbsp; &nbsp; &nbsp; :</span>&nbsp;<input name="location" type="text" autocomplete="off" placeholder="Address.." /></p>
+		<p><span style="color: #008000;">Date&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; :</span>&nbsp;<input name="date" type="date" /></p>
+		<p><span style="color: #008000;">Time&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; :</span>&nbsp;<input name="time" type="time"  /></p>
+		<p><span style="color: #008000;">Description&nbsp; :</span></p>
+		<p><textarea cols="50" name="description" rows="5" autocomplete="off" placeholder="This event is about..."></textarea></p>
+		<p><br /><br /> <input type="submit" value="Create Event" /></p>
+		</form>
+	</div>
 </body>
 </html>
