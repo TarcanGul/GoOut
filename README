@@ -24,3 +24,8 @@ IMPORTANT (FILE HIERARCHY)
             - css files
         /images
             - image files
+            
+Follow to fix .gitignore:
+git rm -r --cached .
+git add .
+git commit -m "fixed untracked files"
