@@ -1,6 +1,6 @@
 {% extends "index.html" %}
 {% block topnav %}
-<a class="active" href="/managerHome">Home</a>
+<a class="active" href="/userHome/{{username}}">Home</a>
 <a text-align="right" href="/">Log Out</a>
 {% endblock %}
 {% block photo %}
@@ -37,9 +37,16 @@ Welcome {{username}}! Here are the events nearby!
         <p>Manager: {{ event[1]['manager'] }} </p>
         <p>Number of RSVP's: {{ event[1]['rsvp'] }}</p>
         <br>
-        <form action="{{url_for('rsvpToEvent', username = username, event = event[0])}}" method="POST">
-        <button id="RSVP" onclick="alert('Thank you for your RSVP to {{event[0]}}'); this.disabled = true;"> RSVP </button>
+        {% if generateEventID(event[0]) not in returnRSVPList(username) %}
+        <form action="{{ url_for('rsvpToEvent', username = username, event = event[0]) }}" method="POST">
+            <button name = "rsvpButton" type="submit" onclick="alert('Thank you for your RSVP to {{event[0]}}!');">RSVP</button>
         </form>
+        {% else %}
+        <form action="{{ url_for('cancelRSVP', username = username, event = event[0]) }}" method="POST">
+            <h6>RSVP succesful</h6>
+            <button name = "cancelButton" type="submit" onclick="alert('Cancelled your RSVP to {{event[0]}}.');">Cancel</button>
+        </form>
+        {% endif %}
         </div>
     {% endfor %}
 </div>

@@ -6,10 +6,12 @@ import os
 import sys
 import hashlib
 
+
 app = Flask(__name__, template_folder="front-end")
 APP_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_PATH = os.path.join(APP_PATH,"../front-end")
 app.static_folder="static"
+
 
 #fireabse setup
 projectID = "https://goout-5cd6e.firebaseio.com/"
@@ -18,6 +20,17 @@ firebase = firebase.FirebaseApplication(projectID, None)
 def generateEventID(title):
   #TODO: The generateEventID() method should return a number computed using event title, date, time and location.
   return ord(title[0]) * 37
+
+def returnRSVPList(user):
+  result = firebase.get("/users/"+user, "rsvped events")
+  print(result, file=sys.stderr)
+  if result==None:
+    return []
+  else:
+    return result
+
+app.jinja_env.globals.update(generateEventID=generateEventID)
+app.jinja_env.globals.update(returnRSVPList=returnRSVPList)
 
 @app.route("/")
 def indexWebsite():
@@ -37,10 +50,29 @@ def serveUserHomePage(username):
 @app.route("/userAction/RSVP/<username>/<event>", methods=['POST'])
 def rsvpToEvent(username, event):
   result = firebase.get("/events", event)
+  eventID = generateEventID(event)
+  listOfRSVP = firebase.get("/users/"+username, "rsvped events")
+  if listOfRSVP == None:
+    listOfRSVP = []
+  if eventID not in listOfRSVP:
+    listOfRSVP.append(eventID)
+  firebase.put("/users/"+username, "rsvped events", listOfRSVP)
   RSVP = int(result['rsvp'])
   RSVP = RSVP + 1
   firebase.put("/events/" + event, "rsvp", RSVP)
   return redirect(url_for('serveUserHomePage', username=username))
+
+@app.route("/userAction/RSVPCancel/<username>/<event>", methods=['POST'])
+def cancelRSVP(username, event):
+  eventID = generateEventID(event)
+  listOfRSVP = returnRSVPList(username)
+  listOfRSVP.remove(eventID)
+  firebase.put("/users/"+username, "rsvped events", listOfRSVP)
+  result = firebase.get("/events", event)
+  RSVP = int(result['rsvp'])
+  RSVP = RSVP - 1
+  firebase.put("/events/" + event, "rsvp", RSVP)
+  return redirect(url_for('serveUserHomePage', username=username))  
 
 @app.route("/managerHome/createEvent/<username>")
 def serveCreateEventPage(username):
@@ -92,7 +124,7 @@ def handleSignUp():
 	    raw_password.encode("utf-8")
 	    password = hashlib.md5(raw_password.encode())
 	    #TODO: Push username and password to the database.
-	    push = firebase.put('/users', username, password.hexdigest())
+	    push = firebase.put('/users/'+ username,"password",password.hexdigest())
 	    return redirect("/")
 
 	  #setup new html page that displays "ERROR: user already exists"
@@ -133,7 +165,7 @@ def handleSignIn():
     password = hashlib.md5(raw_password.encode())
     print(password.hexdigest(), file=sys.stderr)
     print(str(result), file=sys.stderr)
-    if str(result) == password.hexdigest():
+    if result['password'] == password.hexdigest():
       #auth success
       return redirect(url_for('serveUserHomePage', username=username))
     else:
