@@ -14,15 +14,19 @@ Welcome {{username}}! Here are the events nearby!
     .gridContainer {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        background-color: rgb(95, 41, 50);
+        background: #73AD21;
         padding: 10px;
+        column-gap: 15px;
+        grid-row-gap: 15px;
     }
     .gridElement {
         background-color: rgba(255, 255, 255, 0.8);
-        border: 1px solid rgba(0, 0, 0, 0.8);
+        border: 2px;
         padding: 20px;
         font-size: 15px;
         text-align: center;
+        border-radius: 25px;
+        box-shadow: 5px 10px #888888;
     }
 </style>
 {# event[0] will be the parent key and event[1] is the child. #}
