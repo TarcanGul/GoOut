@@ -9,17 +9,23 @@ import hashlib
 
 app = Flask(__name__, template_folder="front-end")
 APP_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TEMPLATE_PATH = os.path.join(APP_PATH,"../front-end")
-app.static_folder="static"
+TEMPLATE_PATH = os.path.join(APP_PATH, "../front-end")
+app.static_folder = "static"
 
-
-#fireabse setup
+# fireabse setup
 projectID = "https://goout-5cd6e.firebaseio.com/"
 firebase = firebase.FirebaseApplication(projectID, None)
 
-def generateEventID(title):
-  #TODO: The generateEventID() method should return a number computed using event title, date, time and location.
-  return ord(title[0]) * 37
+
+def generateEventID(title, location, date, time):
+    # TODO: The generateEventID() method should return a number computed using event title, date, time and location.
+    raw_eventID = title + location + date + time
+    raw_eventID.encode("utf-8")
+
+    eventID = hashlib.md5(raw_eventID.encode())
+
+    return eventID.hexdigest()
+
 
 def returnRSVPList(user):
   result = firebase.get("/users/"+user, "rsvped events")
@@ -34,18 +40,20 @@ app.jinja_env.globals.update(returnRSVPList=returnRSVPList)
 
 @app.route("/")
 def indexWebsite():
-	return render_template("index.html")
+    return render_template("index.html")
+
 
 @app.route("/userHome/<username>")
 def serveUserHomePage(username):
-  #TODO: Auth first
-  result = firebase.get("/users", username)
-  if result == None:
-    #User does not exist.
-    #TODO: Maybe have 404.html to show here.
-    return "User does not exist."
-  allEvents = firebase.get("/events", None)
-  return render_template("userMainPage.html", username=username, allEvents=allEvents)
+    # TODO: Auth first
+    result = firebase.get("/users", username)
+    if result == None:
+        # User does not exist.
+        # TODO: Maybe have 404.html to show here.
+        return "User does not exist."
+    allEvents = firebase.get("/events", None)
+    return render_template("userMainPage.html", username=username, allEvents=allEvents)
+
 
 @app.route("/userAction/RSVP/<username>/<event>", methods=['POST'])
 def rsvpToEvent(username, event):
@@ -72,50 +80,54 @@ def cancelRSVP(username, event):
   RSVP = int(result['rsvp'])
   RSVP = RSVP - 1
   firebase.put("/events/" + event, "rsvp", RSVP)
-  return redirect(url_for('serveUserHomePage', username=username))  
+  return redirect(url_for('serveUserHomePage', username=username))
 
 @app.route("/managerHome/createEvent/<username>")
 def serveCreateEventPage(username):
-  return render_template("createEvent.html", username=username)
+    return render_template("createEvent.html", username=username)
+
 
 @app.route("/managerAction/addEvent/<username>", methods=['POST'])
 def addEvent(username):
-  #So the idea is that we have to create a event node using title as key (or maybe some number generated like title_id)
-  title = request.form["title"]
+    # So the idea is that we have to create a event node using title as key (or maybe some number generated like title_id)
+    title = request.form["title"]
 
-  result = firebase.put("/events", title, generateEventID(title))
-  #Then we will add rest of the attributes as their child.
-  event_attributes = "/events/" + title
-  
-  location = request.form["location"]
-  date = request.form["date"]
-  time = request.form["time"]
-  description = request.form["description"]
+    location = request.form["location"]
+    date = request.form["date"]
+    time = request.form["time"]
+    description = request.form["description"]
 
-  firebase.put(event_attributes, "manager", username)
-  firebase.put(event_attributes, "location", location)
-  firebase.put(event_attributes, "date", date)
-  firebase.put(event_attributes, "time", time)
-  firebase.put(event_attributes, "description", description)
-  firebase.put(event_attributes, "rsvp", 0)
-  #Confirmation html
-  return redirect(url_for('serveManagerHome', username=username))
+    result = firebase.put("/events", title, generateEventID(title, location, date, time))
+    # Then we will add rest of the attributes as their child.
+    event_attributes = "/events/" + title
+
+
+    firebase.put(event_attributes, "manager", username)
+    firebase.put(event_attributes, "location", location)
+    firebase.put(event_attributes, "date", date)
+    firebase.put(event_attributes, "time", time)
+    firebase.put(event_attributes, "description", description)
+    firebase.put(event_attributes, "rsvp", 0)
+    # Confirmation html
+    return redirect(url_for('serveManagerHome', username=username))
+
 
 @app.route("/auth")
 def serveAuthPage():
-  if request.method == 'GET':
-    return render_template("auth.html")
+    if request.method == 'GET':
+        return render_template("auth.html")
+
 
 @app.route("/handleSignUp", methods=['POST'])
 def handleSignUp():
-  
+
   #Getting auth variable from query string
   auth = request.args.get("auth")
   username = request.form['username']
 
   #If auth is for user
   if auth == 'u':
-    
+
     #check username
     result = firebase.get('/users', username)
     if result == None:
@@ -143,9 +155,9 @@ def handleSignUp():
     #Error: Manager name already exists.
     return redirect("/")
   return "Auth error"
-    
 
-  
+
+
 
 @app.route("/handleSignIn", methods=['POST'])
 def handleSignIn():
@@ -191,33 +203,33 @@ def handleSignIn():
     else:
         #auth fail
       return "Password incorrect"
-  
+
   #if url error
   return "Bad sign in request"
 
 @app.route("/authManager")
 def serveManagerAuth():
-  return render_template("authManager.html")
+    return render_template("authManager.html")
 
-#TODO: Keep track of authentication so the user cannot access the manager profile by directly typing the url. 
+# TODO: Keep track of authentication so the user cannot access the manager profile by directly typing the url.
 @app.route("/managerHome/<username>")
 def serveManagerHome(username):
-  #TODO: Auth first
-  result = firebase.get("/managers", username)
-  if result == None:
-    #Manager does not exist.
-    #TODO: Maybe have 404.html to show here.
-    return "Manager does not exist."
-  allEvents = firebase.get("/events", None)
-  return render_template("managerMainPage.html", username=username, allEvents=allEvents)
+    # TODO: Auth first
+    result = firebase.get("/managers", username)
+    if result == None:
+        # Manager does not exist.
+        # TODO: Maybe have 404.html to show here.
+        return "Manager does not exist."
+    allEvents = firebase.get("/events", None)
+    return render_template("managerMainPage.html", username=username, allEvents=allEvents)
+
 
 @app.route("/test")
 def getUsers():
-	title = "dance"
-	location = "PMU"
+    title = "dance"
+    location = "PMU"
 
+    result = firebase.put('/users', user, pwd)
 
-	result = firebase.put('/users', user, pwd)
-
-	result = firebase.get('/users', None)
-	return str(result)
+    result = firebase.get('/users', None)
+    return str(result)
