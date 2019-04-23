@@ -41,6 +41,12 @@ input[type=submit]:hover {
 	
 	<div class="split left">
 	<h1 id="signin">Sign In!</h1>
+		{% if error %}
+			    <div class="alert">
+			        Incorrect username or password
+			    </div>
+		{% endif %}
+
 		<div class="container">
 			<form id="signInForm" action="{{url_for('handleSignIn', auth='u')}}" method="POST">
 			<p>Username:<input autocomplete="off" name="username" type="text" /></p>

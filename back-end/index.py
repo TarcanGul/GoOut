@@ -170,7 +170,7 @@ def handleSignIn():
     if result == None:
       #user does not exist
       #return render_template("userDoesNotExist.html")
-      return redirect("/auth")
+      return render_template("/auth.html",error=True)
     #otherwise, check password
     raw_password = request.form['password']
     raw_password.encode("utf-8")
@@ -182,7 +182,7 @@ def handleSignIn():
       return redirect(url_for('serveUserHomePage', username=username))
     else:
         #auth fail
-      return "Password incorrect"
+      return render_template("/auth.html", error=True)
 
    #If auth is for manager
   elif auth == 'm':
@@ -190,7 +190,7 @@ def handleSignIn():
     if result == None:
       #manager does not exist
       #return render_template("managerDoesNotExist.html")
-      return redirect("/auth")
+      return render_template("/authManager.html", error=True)
     #otherwise, check password
     raw_password = request.form['password']
     raw_password.encode("utf-8")
@@ -202,7 +202,7 @@ def handleSignIn():
       return redirect(url_for('serveManagerHome', username=username))
     else:
         #auth fail
-      return "Password incorrect"
+      return render_template("/authManager.html", error=True)
 
   #if url error
   return "Bad sign in request"
