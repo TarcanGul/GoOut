@@ -40,7 +40,23 @@ app.jinja_env.globals.update(returnRSVPList=returnRSVPList)
 
 @app.route("/")
 def indexWebsite():
-    return render_template("index.html")
+    #TODO: Put first three RSVPed events to the main page.
+    most_RSVP_dict = []
+    event_entries = firebase.get("/events", None)
+    for entry in event_entries.items():
+      most_RSVP_dict.append([entry[0], int(entry[1]['rsvp'])])
+    most_RSVP_dict.sort(key=lambda x: x[1])
+    #Get last three elements since the sorting is ascending. We want first 3 max rsvp
+    events_displayed = most_RSVP_dict[-3:]
+    print(events_displayed, file=sys.stderr)
+    event3 = firebase.get("/events", events_displayed[0][0])
+    event2 = firebase.get("/events", events_displayed[1][0])
+    event1 = firebase.get("/events", events_displayed[2][0])
+
+    print("Event 1:" + str(event1.items()), file=sys.stderr)
+    highlights = [[events_displayed[2][0], event1], [events_displayed[1][0], event2], [events_displayed[0][0], event3]]
+
+    return render_template("index.html", highlights = highlights)
 
 
 @app.route("/userHome/<username>")

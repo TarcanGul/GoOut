@@ -15,28 +15,62 @@
 
 		
 		<div class="container_img">
-			{% block photo %}<img src="../static/Images/wide_concert.jpg"  style="width: 100%">{% endblock %}
+			{% block photo %}<img src="../static/Images/wide_concert.jpg"  style="width: 100%; height: 50%;">{% endblock %}
 			<div class="centered_low">{% block main_text %}Time to Go Out!{% endblock %}</div>
 		</div>
 		
 		<div class="intro">
 		{% block intro %}
-			<h2>Go Out!</h2>
-
-			<p class="opaque">
-				<i>More text</i>
-			</p>
-
-			<p>description</p>
+			<h2>Here are the most popular events!</h2>
+			<h4>Sign up to RSVP and find out about other events.</h4>
+			<style>
+				.gridContainer {
+					display: grid;
+					grid-template-columns: repeat(3, 1fr);
+					background: #73AD21;
+					padding: 10px;
+					column-gap: 15px;
+					grid-row-gap: 15px;
+				}
+				.gridElement {
+					background-color: rgba(255, 255, 255, 0.8);
+					border: 2px;
+					padding: 20px;
+					font-size: 15px;
+					text-align: center;
+					border-radius: 25px;
+					box-shadow: 5px 10px #888888;
+					opacity: 0.8;
+				}
+			
+				.gridElement:hover {
+					transform: scale(1.1);
+					opacity: 1.0;
+				}
+			</style>
+			<div class="gridContainer" >
+			{% for event in highlights %}
+				<div class="gridElement">
+				<h3>{{ event[0] }}</h3>
+				<p>Date: {{ event[1]['date'] }}</p>
+				<p>Time: {{ event[1]['time'] }}</p>
+				<p>Location: {{ event[1]['location'] }}</p>
+				<p>Description: {{ event[1]['description'] }}</p>
+				<p>Manager: {{ event[1]['manager'] }} </p>
+				<p>Number of RSVP's: {{ event[1]['rsvp'] }}</p>
+				<br>
+				</div>
+			{% endfor %}
+			</div>
 		{% endblock %}
 		</div>
 
 		{% block footer %}
 		<footer class="foot_container">
-			<i>Foot stuff</i>
+			<i>Made by Tarcan Gul, Sidharth Venkatesh and Vaastav Arora.</i>
 		{% endblock %}
 		{% block buttom_text %}
-		<p>Powered by Coffee</p>
+		<p>Powered by Dedication</p>
 		{% endblock %}
 
 	</body>

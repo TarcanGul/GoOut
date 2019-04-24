@@ -4,6 +4,9 @@
 {% block topnav %}
 <a class="active" href="/managerHome/{{username}}">Home</a>
 <a href="createEvent/{{username}}">Create Event</a>
+<div class="right">
+    <a href="/">Log Out</a>
+</div>
 {% endblock %}
 {% block photo %}
 {{ super() }}
