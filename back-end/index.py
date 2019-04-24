@@ -106,7 +106,7 @@ def rsvpToEvent(username, event):
 @app.route("/userAction/RSVPCancel/<username>/<event>", methods=['POST'])
 def cancelRSVP(username, event):
   eventID = generateEventID(event)
-  listOfRSVP = returneventRSVPList(username)
+  listOfRSVP = returneventRSVPList(event)
   listOfRSVP.remove(username)
   firebase.put("/events/"+event, "rsvped users", listOfRSVP)
   result = firebase.get("/events", event)
