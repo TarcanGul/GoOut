@@ -49,7 +49,7 @@ Welcome {{username}}!
         <p>Manager: {{ event[1]['manager'] }} </p>
         <p>Number of RSVP's: {{ event[1]['rsvp'] }}</p>
         <br>
-        {% if generateEventID(event[0]) not in returnRSVPList(username) %}
+        {% if username not in returneventRSVPList(event[0]) %}
         <form action="{{ url_for('rsvpToEvent', username = username, event = event[0]) }}" method="POST">
             <button name = "rsvpButton" type="submit" onclick="alert('Thank you for your RSVP to {{event[0]}}!');">RSVP</button>
         </form>

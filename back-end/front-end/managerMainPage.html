@@ -42,6 +42,9 @@ Welcome {{username}}! Here are your events so far!
 </style>
 {# event[0] will be the parent key and event[1] is the child. #}
 <div class="gridContainer" >
+    {% if allEvents == None %}
+    <h3>Add new events via the Create Event tab!</h3>
+    {% else %}
     {% for event in allEvents.items() %}
         {% if event[1]['manager'] == username %}
         <div class="gridElement">
@@ -55,5 +58,7 @@ Welcome {{username}}! Here are your events so far!
         </div>
         {% endif %}
     {% endfor %}
+    {% endif %}
+    
 </div>
 {% endblock %}

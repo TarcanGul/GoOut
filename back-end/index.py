@@ -35,26 +35,43 @@ def returnRSVPList(user):
   else:
     return result
 
+def returneventRSVPList(event):
+  result = firebase.get("/events/"+event, "rsvped users")
+  if result == None:
+    return []
+  else:
+    return result
+
 app.jinja_env.globals.update(generateEventID=generateEventID)
 app.jinja_env.globals.update(returnRSVPList=returnRSVPList)
+app.jinja_env.globals.update(returneventRSVPList=returneventRSVPList)
+app.jinja_env.globals.update(len=len)
+app.jinja_env.globals.update(type=type)
+app.jinja_env.globals.update(str=str)
 
 @app.route("/")
 def indexWebsite():
     #TODO: Put first three RSVPed events to the main page.
     most_RSVP_dict = []
     event_entries = firebase.get("/events", None)
-    for entry in event_entries.items():
-      most_RSVP_dict.append([entry[0], int(entry[1]['rsvp'])])
-    most_RSVP_dict.sort(key=lambda x: x[1])
-    #Get last three elements since the sorting is ascending. We want first 3 max rsvp
-    events_displayed = most_RSVP_dict[-3:]
-    print(events_displayed, file=sys.stderr)
-    event3 = firebase.get("/events", events_displayed[0][0])
-    event2 = firebase.get("/events", events_displayed[1][0])
-    event1 = firebase.get("/events", events_displayed[2][0])
+    if event_entries == None or type(event_entries) is str:
+      highlights = None
+    else:
+      for entry in event_entries.items():
+        most_RSVP_dict.append([entry[0], int(entry[1]['rsvp'])])
+      most_RSVP_dict.sort(key=lambda x: x[1])
+      #Get last three elements since the sorting is ascending. We want first 3 max rsvp
+      max_highlight_finder = lambda x: 3 if x >= 3 else x 
+      max_highlight = max_highlight_finder(len(most_RSVP_dict))
+      events_displayed = most_RSVP_dict[-max_highlight:]
+      print(events_displayed, file=sys.stderr)
+      list_highlights = []
+      for i in reversed(range(0, max_highlight)):
+        list_highlights.append(firebase.get("/events", events_displayed[i][0]))
 
-    print("Event 1:" + str(event1.items()), file=sys.stderr)
-    highlights = [[events_displayed[2][0], event1], [events_displayed[1][0], event2], [events_displayed[0][0], event3]]
+      highlights = []
+      for i in range(0, max_highlight):
+        highlights.append([events_displayed[i], list_highlights[i]])
 
     return render_template("index.html", highlights = highlights)
 
@@ -68,6 +85,8 @@ def serveUserHomePage(username):
         # TODO: Maybe have 404.html to show here.
         return "User does not exist."
     allEvents = firebase.get("/events", None)
+    if type(allEvents) is str:
+      allEvents = None
     return render_template("userMainPage.html", username=username, allEvents=allEvents)
 
 
@@ -75,12 +94,10 @@ def serveUserHomePage(username):
 def rsvpToEvent(username, event):
   result = firebase.get("/events", event)
   eventID = generateEventID(event)
-  listOfRSVP = firebase.get("/users/"+username, "rsvped events")
-  if listOfRSVP == None:
-    listOfRSVP = []
-  if eventID not in listOfRSVP:
-    listOfRSVP.append(eventID)
-  firebase.put("/users/"+username, "rsvped events", listOfRSVP)
+  listOfRSVP = returneventRSVPList(event)
+  if username not in listOfRSVP:
+    listOfRSVP.append(username)
+  firebase.put("/events/" + event, "rsvped users", listOfRSVP)
   RSVP = int(result['rsvp'])
   RSVP = RSVP + 1
   firebase.put("/events/" + event, "rsvp", RSVP)
@@ -89,9 +106,9 @@ def rsvpToEvent(username, event):
 @app.route("/userAction/RSVPCancel/<username>/<event>", methods=['POST'])
 def cancelRSVP(username, event):
   eventID = generateEventID(event)
-  listOfRSVP = returnRSVPList(username)
-  listOfRSVP.remove(eventID)
-  firebase.put("/users/"+username, "rsvped events", listOfRSVP)
+  listOfRSVP = returneventRSVPList(username)
+  listOfRSVP.remove(username)
+  firebase.put("/events/"+event, "rsvped users", listOfRSVP)
   result = firebase.get("/events", event)
   RSVP = int(result['rsvp'])
   RSVP = RSVP - 1
@@ -124,6 +141,8 @@ def addEvent(username):
     firebase.put(event_attributes, "time", time)
     firebase.put(event_attributes, "description", description)
     firebase.put(event_attributes, "rsvp", 0)
+    firebase.put(event_attributes, "rsvped users", [])
+
     # Confirmation html
     return redirect(url_for('serveManagerHome', username=username))
 
@@ -237,6 +256,8 @@ def serveManagerHome(username):
         # TODO: Maybe have 404.html to show here.
         return "Manager does not exist."
     allEvents = firebase.get("/events", None)
+    if type(allEvents) is str:
+      allEvents = None
     return render_template("managerMainPage.html", username=username, allEvents=allEvents)
 
 
