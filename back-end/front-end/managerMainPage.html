@@ -55,8 +55,12 @@ Welcome {{username}}! Here are your events so far!
         <p>Description: {{ event[1]['description'] }}</p>
         <p>Number of RSVP's: {{ event[1]['rsvp'] }}</p>
         <br>
+        <form action="{{ url_for('deleteEvent', username = username, event = event[0]) }}" method="POST">
+            <button name = "deleteButton" type="submit" onclick="alert('Deleted {{event[0]}}!');">Delete</button>
+        </form>
         </div>
         {% endif %}
+       
     {% endfor %}
     {% endif %}
     

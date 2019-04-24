@@ -66,11 +66,11 @@ def indexWebsite():
       events_displayed = most_RSVP_dict[-max_highlight:]
       print(events_displayed, file=sys.stderr)
       list_highlights = []
-      for i in reversed(range(0, max_highlight)):
+      for i in range(0, max_highlight):
         list_highlights.append(firebase.get("/events", events_displayed[i][0]))
 
       highlights = []
-      for i in range(0, max_highlight):
+      for i in reversed(range(0, max_highlight)):
         highlights.append([events_displayed[i], list_highlights[i]])
 
     return render_template("index.html", highlights = highlights)
@@ -145,6 +145,16 @@ def addEvent(username):
 
     # Confirmation html
     return redirect(url_for('serveManagerHome', username=username))
+
+@app.route("/managerAction/deleteEvent/<username>/<event>", methods=['POST'])
+def deleteEvent(username, event):
+  result = firebase.get("/events", event)
+  if result != None:
+    #This is for security.
+    if result['manager'] == username:
+      firebase.delete("/events", event)
+
+  return redirect(url_for('serveManagerHome', username=username))
 
 
 @app.route("/auth")
