@@ -29,7 +29,7 @@ def generateEventID(title):
 
 def returnRSVPList(user):
   result = firebase.get("/users/"+user, "rsvped events")
-  print(result, file=sys.stderr)
+  #print(result, file=sys.stderr)
   if result==None:
     return []
   else:
@@ -61,10 +61,10 @@ def indexWebsite():
         most_RSVP_dict.append([entry[0], int(entry[1]['rsvp'])])
       most_RSVP_dict.sort(key=lambda x: x[1])
       #Get last three elements since the sorting is ascending. We want first 3 max rsvp
-      max_highlight_finder = lambda x: 3 if x >= 3 else x 
+      max_highlight_finder = lambda x: 3 if x >= 3 else x
       max_highlight = max_highlight_finder(len(most_RSVP_dict))
       events_displayed = most_RSVP_dict[-max_highlight:]
-      print(events_displayed, file=sys.stderr)
+      #print(events_displayed, file=sys.stderr)
       list_highlights = []
       for i in range(0, max_highlight):
         list_highlights.append(firebase.get("/events", events_displayed[i][0]))
@@ -220,8 +220,8 @@ def handleSignIn():
     raw_password = request.form['password']
     raw_password.encode("utf-8")
     password = hashlib.md5(raw_password.encode())
-    print(password.hexdigest(), file=sys.stderr)
-    print(str(result), file=sys.stderr)
+    #print(password.hexdigest(), file=sys.stderr)
+    #print(str(result), file=sys.stderr)
     if result['password'] == password.hexdigest():
       #auth success
       return redirect(url_for('serveUserHomePage', username=username))
@@ -240,8 +240,8 @@ def handleSignIn():
     raw_password = request.form['password']
     raw_password.encode("utf-8")
     password = hashlib.md5(raw_password.encode())
-    print(password.hexdigest(), file=sys.stderr)
-    print(str(result), file=sys.stderr)
+    #print(password.hexdigest(), file=sys.stderr)
+    #print(str(result), file=sys.stderr)
     if str(result) == password.hexdigest():
       #auth success
       return redirect(url_for('serveManagerHome', username=username))
